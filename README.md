@@ -118,7 +118,7 @@ All of the above applies, with the following additions:
 
 | Category                    | Naming Style                                        | Example                                 |
 | --------------------------- | --------------------------------------------------- | --------------------------------------- |
-| Constants                   | SCREAMING_SNAKE_CASE                                | `MY_CONSTANT`                           |
+| Constants (primitives)      | SCREAMING_SNAKE_CASE                                | `MY_CONSTANT`                           |
 | Types                       | PascalCase                                          | `MyType`                                |
 | Components                  | PascalCase                                          | `MyComponent`                           |
 | Everything else             | camelCase                                           | `myVariable`                            |
