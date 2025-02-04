@@ -354,12 +354,14 @@ Use comments in the following format:
 
 **Standardized Comment Format**:
 
-- 💅 Use this emoji for non-blocking comments. _This can be improved, but it’s not a blocker_.
-- ⛔️ Use this emoji for blocking comments. _This must be reworked and cannot be merged as is_.
+- Comments should follow [conventional comments](https://conventionalcomments.org). 
+- Comment should have prefix: `<label>: ...`. Labels include `issue`, `suggestion`, `nitpick`, `question`, `thought`, and `praise`.
+- Decorations give additional context for a comment, e.g. `suggestion(non-blocking): <description>` (it might not be clear if suggestion is blocking).
+
 
 ## Environment Variables
 
-> `.env` must always be gitignored; `env.example` should not.
+> `.env` must always be gitignored; `.env.example` should not.
 
 A good utility library for Next.js is [t3-env](https://github.com/t3-oss/t3-env), which helps distinguish between **client** and **server** environment variables.
 
