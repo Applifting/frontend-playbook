@@ -180,9 +180,7 @@ There's a really good article [Type vs Interface: Which Should You Use?](https:/
 
 - **Interfaces can't express** unions, mapped types, or conditional types, and all of these are very useful in day-to-day frontend work.
 - **Interfaces** with the same name in the same scope **merge their declarations**, leading to unexpected bugs.
-- **Type** aliases have an implicit index signature of `Record<PropertyKey,
-
-unknown>`, which occasionally comes up.
+- **Type** aliases have an implicit index signature of `Record<PropertyKey, unknown>`, which occasionally comes up.
 
 - Basically, the **only pro of using interface** over type is inheritance. `extends` makes **TypeScript's type checker run slightly faster** than using `&`.
 
@@ -356,12 +354,14 @@ Use comments in the following format:
 
 **Standardized Comment Format**:
 
-- 💅 Use this emoji for non-blocking comments. _This can be improved, but it’s not a blocker_.
-- ⛔️ Use this emoji for blocking comments. _This must be reworked and cannot be merged as is_.
+- Comments should follow [conventional comments](https://conventionalcomments.org). 
+- Comment should have prefix: `<label>: ...`. Labels include `issue`, `suggestion`, `nitpick`, `question`, `thought`, and `praise`.
+- Decorations give additional context for a comment, e.g. `suggestion(non-blocking): <description>` (it might not be clear if suggestion is blocking).
+
 
 ## Environment Variables
 
-> `.env` must always be gitignored; `env.example` should not.
+> `.env` must always be gitignored; `.env.example` should not.
 
 A good utility library for Next.js is [t3-env](https://github.com/t3-oss/t3-env), which helps distinguish between **client** and **server** environment variables.
 
@@ -413,9 +413,7 @@ The recommended approach for creating reusable UI components is [Shadcn/ui](http
 
 #### Typography
 
-Shadcn/ui does not have a dedicated typography component. A recommended approach is described in [this GitHub issue](<https://github.com/shadcn-ui>
-
-/ui/pull/363#issuecomment-1659259897), which has been tested on two projects with good results.
+Shadcn/ui does not have a dedicated typography component. A recommended approach is described in [this GitHub issue](<https://github.com/shadcn-ui>/ui/pull/363#issuecomment-1659259897), which has been tested on two projects with good results.
 
 ### Styling
 
