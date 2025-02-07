@@ -3,7 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) for more information on how to structure this file.
 
-## 0.1.1 - 2025-01-14
+## [0.1.2] - 2025-02-07
+
+### Changed
+
+- Fix typos
+- Use [Conventional Comments](https://conventionalcomments.org/) as guidelines for MR feedback
+
+## [0.1.1] - 2025-01-14
 
 ### Changed
 
