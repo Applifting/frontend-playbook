@@ -270,6 +270,21 @@ const currentUserRole: Role = Roles.Admin; // Valid
 | **arrow functions** | function expression / declaration |
 | **async/await**     | promise chaining                  |
 | **named exports**   | default exports                   |
+| **Boolean(value)**  | !!value                           |
+
+### Boolean Conversion
+
+Avoid using double negation (`!!`) for converting values to boolean. Instead, use `Boolean()`. This makes the conversion explicit and improves code readability.
+
+✅ **Use**
+```ts
+const isValid = Boolean(value);
+````
+
+❌ **Don't use**
+```ts
+const isValid = !!value;
+````
 
 ### Declarative vs Imperative
 
