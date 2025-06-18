@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) for more information on how to structure this file.
 
+## [0.1.4] - 2025-06-18
+
+### Changed
+
+- Fix links (table of content, eslint and prettier, typography example)
+
 ## [0.1.3] - 2025-02-17
 
 ### Changed
