@@ -25,10 +25,10 @@
   - [Immutability](#immutability)
     - [Examples](#examples)
   - [Enumerations](#enumerations)
-    - [Examples](#examples)
+    - [Examples](#examples-2)
 - [Coding](#coding)
   - [Declarative vs Imperative](#declarative-vs-imperative)
-    - [Examples](#examples)
+    - [Examples](#examples-3)
 - [Static Code Analysis](#static-code-analysis)
   - [ESLint](#eslint)
   - [Prettier](#prettier)
@@ -328,11 +328,11 @@ const handleItemsDeclaratively = (items: Item[]) => {
 
 ### ESLint
 
-- See [Corplifting ESLint config](https://git.applifting.cz/corplifting1/corplifting-frontend/-/blob/main/.eslintrc.cjs).
+- See [FE Monorepo ESLint config](https://git.applifting.cz/frontend/fe-monorepo/-/tree/main/packages/eslint-config).
 
 ### Prettier
 
-- See [Corplifting Prettier config](https://git.applifting.cz/corplifting1/corplifting-frontend/-/blob/main/prettier.config.js).
+- See [FE Monorepo Prettier config](https://git.applifting.cz/frontend/fe-monorepo/-/tree/main/packages/prettier-config).
 
 ## Documentation
 
@@ -369,10 +369,9 @@ Use comments in the following format:
 
 **Standardized Comment Format**:
 
-- Comments should follow [conventional comments](https://conventionalcomments.org). 
+- Comments should follow [conventional comments](https://conventionalcomments.org).
 - Comment should have prefix: `<label>: ...`. Labels include `issue`, `suggestion`, `nitpick`, `question`, `thought`, and `praise`.
 - Decorations give additional context for a comment, e.g. `suggestion(non-blocking): <description>` (it might not be clear if suggestion is blocking).
-
 
 ## Environment Variables
 
@@ -428,8 +427,7 @@ The recommended approach for creating reusable UI components is [Shadcn/ui](http
 
 #### Typography
 
-Shadcn/ui does not have a dedicated typography component. A recommended approach is described in [this GitHub issue](<https://github.com/shadcn-ui>/ui/pull/363#issuecomment-1659259897), which has been tested on two projects with good results.
-
+Shadcn/ui does not have a dedicated typography component. A recommended approach is described in [this GitHub issue](https://github.com/shadcn-ui/ui/pull/363#issuecomment-1659259897), which has been tested on two projects with good results.
 ### Styling
 
 #### Tailwind CSS
