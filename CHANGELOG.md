@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) for more information on how to structure this file.
 
+## [0.1.5] - 2025-07-10
+
+### Changed
+
+- Update section about explicit **boolean** conversion
+- Allow and promote the double bang notation (`!!`) as correct solution for **boolean** conversion
+
 ## [0.1.4] - 2025-06-18
 
 ### Changed
