@@ -270,21 +270,69 @@ const currentUserRole: Role = Roles.Admin; // Valid
 | **arrow functions** | function expression / declaration |
 | **async/await**     | promise chaining                  |
 | **named exports**   | default exports                   |
-| **Boolean(value)**  | !!value                           |
 
 ### Boolean Conversion
 
-Avoid using double negation (`!!`) for converting values to boolean. Instead, use `Boolean()`. This makes the conversion explicit and improves code readability.
+Prefer to be explicit with boolean conversions. Use either the double bang notation (`!!`) or the `Boolean()` method. Implicit conversions, for example in `if` statements, are alright.
 
-✅ **Use**
 ```ts
-const isValid = Boolean(value);
-````
+type User = {
+    id: string
+}
 
-❌ **Don't use**
+const user: User | null | undefined = {
+    id: "01979ad0-8041-713d-b2e1-47219d90d881"
+};
+
+// ❌ WRONG - logically incorrect comparison (types differ)
+if (user == true) { ... }
+if (user === true) { ... }
+
+// ❌ WRONG - creates the `Boolean` object -> objects are always truthy!
+if (new Boolean(user)) { ... }
+
+// ❌ WRONG - `isAuthenticated` is not a boolean
+const isAuthenticated = user
+// the following would be a typescript error
+const isAuthenticated: boolean = user
+
+// ✅ ALRIGHT - implicit conversion to a `boolean`
+if (user) { ... }
+
+// ✅ GOOD - explicit conversion
+if (!!user) { ... }
+
+// ✅ GOOD - explicit conversion
+if (Boolean(user)) { ... }
+
+// ✅ GOOD - explicit conversion
+const isAuthenticated: boolean = Boolean(user)
+const isAuthenticated: boolean = !!user
+```
+
+When using `Boolean()` method, keep in mind that type narrowing does not work as well:
+
 ```ts
-const isValid = !!value;
-````
+type User = {
+  id: string;
+};
+
+const narrowTypeBang = (user: User | null) => {
+  const isUserDefined = !!user;
+
+  if (isUserDefined) {
+    return user.id; // `user` is of type `User` here, correctly narrowed type
+  }
+};
+
+const narrowTypeBoolean = (user: User | null) => {
+  const isUserDefined = Boolean(user);
+
+  if (isUserDefined) {
+    return user.id; // `user` is of type `User | null` here, not narrowed down, type error
+  }
+};
+```
 
 ### Declarative vs Imperative
 
@@ -428,6 +476,7 @@ The recommended approach for creating reusable UI components is [Shadcn/ui](http
 #### Typography
 
 Shadcn/ui does not have a dedicated typography component. A recommended approach is described in [this GitHub issue](https://github.com/shadcn-ui/ui/pull/363#issuecomment-1659259897), which has been tested on two projects with good results.
+
 ### Styling
 
 #### Tailwind CSS
