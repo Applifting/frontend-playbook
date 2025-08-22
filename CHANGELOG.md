@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) for more information on how to structure this file.
 
-## [0.2.0] - 2025-08-22
+## [0.2.0](https://git.applifting.cz/frontend/style-guide/-/compare/v0.1.5...v0.2.0) - 2025-08-22
 
 ### Changed
 
