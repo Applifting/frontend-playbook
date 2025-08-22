@@ -1,3 +1,8 @@
+---
+version: 0.2.0
+lastUpdatedAt: 2025-08-22
+---
+
 # Applifting Frontend Development Style Guide
 
 **Table of contents**
@@ -10,25 +15,29 @@
   - [Minimize Side Effects](#minimize-side-effects)
   - [Handle Errors with Feedback](#handle-errors-with-feedback)
 - [Project Structure](#project-structure)
+  - [Pages & Routes (Common Concepts)](#pages--routes-common-concepts)
   - [Next.js](#nextjs)
+  - [TanStack Router (or React Router)](#tanstack-router-or-react-router)
+  - [Cross-Feature Composition (Escape Hatch)](#cross-feature-composition-escape-hatch)
 - [Naming Conventions](#naming-conventions)
   - [File naming](#file-naming)
   - [Variable naming](#variable-naming)
-    - [Boolean variables](#boolean-variables)
+  - [Function naming](#function-naming)
   - [Good to Know](#good-to-know)
 - [Components](#components)
   - [Example Component](#example-component)
   - [Code Order in Components](#code-order-in-components)
+  - [Compound Component Pattern](#compound-component-pattern)
 - [TypeScript](#typescript)
   - [Type vs Interface](#type-vs-interface)
   - [Utility Types](#utility-types)
   - [Immutability](#immutability)
-    - [Examples](#examples)
   - [Enumerations](#enumerations)
-    - [Examples](#examples-2)
 - [Coding](#coding)
+  - [Functions](#functions)
+  - [Pure functions](#prefer-pure-functions)
+  - [Boolean conversion](#boolean-conversion)
   - [Declarative vs Imperative](#declarative-vs-imperative)
-    - [Examples](#examples-3)
 - [Static Code Analysis](#static-code-analysis)
   - [ESLint](#eslint)
   - [Prettier](#prettier)
@@ -37,9 +46,6 @@
 - [Contribution](#contribution)
   - [Merge Requests](#merge-requests)
 - [Environment Variables](#environment-variables)
-  - [Vite Example](#vite-example)
-    - [Environment Variables Schema Definition](#environment-variables-schema-definition)
-    - [Usage in Codebase](#usage-in-codebase)
 - [Preferred Libraries](#preferred-libraries)
   - [UI Components](#ui-components)
     - [Typography](#typography)
@@ -51,6 +57,7 @@
   - [Forms](#forms)
   - [Server State Management](#server-state-management)
     - [Tanstack Query](#tanstack-query)
+  - [Routing](#routing)
   - [Translations](#translations)
     - [Adding Translation Documents](#adding-translation-documents)
     - [Using Translation in React Components](#using-translation-in-react-components)
@@ -95,12 +102,258 @@ Always handle potential errors gracefully, whether from API calls, state managem
 
 React doesn’t impose a strict structure for files. After experimenting with various approaches, we’ve found **Feature-sliced Design** to offer the best experience. This pattern is well-documented in the [Bulletproof React](https://github.com/alan2207/bulletproof-react) repository, and we should follow its structure. Instead of copying its contents here, please refer to their documentation, especially the [Project Structure](https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md) section.
 
+### Pages & Routes (Common Concepts)
+
+These rules apply regardless of whether you’re using **Next.js** or **TanStack Router / React Router**:
+
+- **Definition**  
+  Define page (or route) components directly in their respective route files.
+- **Composition**  
+  Pages should compose **at least one feature component** (or multiple, if needed).
+  - Pages are the place to bring **components from different features together** — that’s exactly their purpose.
+- **Stylistic Layout**  
+  Keep **headings, containers, spacing**, and other **purely stylistic layout elements** at the **page/route level.**
+  - These do not belong inside features.
+- **Page Heading**  
+  The heading of a page should always live in the page/route component, never inside a feature.
+- **Features**  
+  Features should only provide **functional, reusable building blocks** (components, hooks, queries, etc.).
+  - Think of feature components as widgets or sections that can be plugged into different pages.
+
+> **Note 1**: The terms page and route mean the same thing — we usually say page in Next.js and route in React Router or TanStack Router.  
+> **Note 2**: **File-based routing** is strongly preferred in both TanStack Router and React Router (just like in Next.js). It ensures consistent structure, discoverability, and reduces boilerplate.
+
+#### Visual overview
+
+```mermaid
+flowchart LR
+  subgraph Page["Page / Route"]
+    direction TB
+    H[Heading / Title]
+    L[Stylistic Layout: container, spacing, wrappers]
+    F1[Feature A Component]
+    F2[Feature B Component]
+    F3[Feature C Component]
+  end
+  subgraph FeatureA["Feature A"]
+    FA1[Widget A1]
+    FA2[Widget A2]
+  end
+  subgraph FeatureB["Feature B"]
+    FB1[Widget B1]
+    FB2[Widget B2]
+  end
+  subgraph FeatureC["Feature C"]
+    FC1[Widget C1]
+  end
+  F1 --> FA1
+  F2 --> FB1
+  F3 --> FC1
+```
+
 ### Next.js
 
 All of the above applies, with the following additions:
 
-- Files in the `pages/` directory should simply re-export `NextPage` components from the feature directory. For example, `@/features/dashboard/pages/DashboardPage.tsx`.
-- Business logic for SSR/SSG (`getServerSideProps` & `getStaticProps`) must be kept in the standard Next.js `pages/` directory, as it won’t work elsewhere.
+- **App Router (Preferred)**  
+  Use the `app/` directory for routing in new projects. Each route file under `app/` is a page, where you should apply the rules above (composition, headings, layout, etc.).
+- **Pages Router (Legacy)**  
+  The `pages/` directory can still be used in existing projects. Keep the standard structure, and remember:
+  - Business logic for SSR/SSG (getServerSideProps, getStaticProps) must remain in the `pages/` directory, as it won’t work elsewhere.
+- **Example Structure**:
+
+```bash
+src/
+  app/
+    posts/
+      page.tsx                  # Page component that composes feature widgets
+  features/
+    posts/
+      components/               # Posts-specific components
+        PostList.tsx            # Posts list component
+      hooks/                    # Posts-specific hooks
+```
+
+### TanStack Router (or React Router)
+
+In TanStack Router (or React Router) applications, organize route files following the file-based routing pattern:
+
+- **Routes Directory**  
+  Create route files directly in the routes directory (e.g., `routes/_Layout/posts/index.tsx`).
+- **Route Loaders**  
+  Keep route-specific data fetching logic in the route file using `loader` functions.
+- **Example Structure:**
+
+  ```bash
+  src/
+    components/
+      ui/
+        Card.tsx            # Shared UI component
+    app/                    # Application configuration
+      Providers.tsx         # Global providers (RouterProvider, etc.)
+      router.tsx            # TanStack Router configuration
+      routes.ts             # Route constants and type definitions
+    routes/
+      __root.tsx            # Root route component
+      _Layout.tsx           # Main layout route
+      _Layout/              # Nested routes under main layout
+        posts/
+          index.tsx         # Route definition of posts feature with loader and component
+        search/
+          index.tsx         # Route definition of search feature with component
+      login.tsx             # Login page route
+    features/
+      posts/
+        api/                # Query keys and query options for posts API calls
+        components/         # Posts-specific components
+          PostList.tsx      # Posts list component
+          PostListItem.tsx  # Posts list item component
+        hooks/              # Posts-specific hooks
+      search/
+        api/                # Query keys and query options for search API calls
+        components/         # Search-specific components
+          SearchList.tsx    # Search list component
+        hooks/              # Search-specific hooks
+    lib/
+      PostListItemContext.tsx
+  ```
+
+- **Example Route**:
+
+  ```tsx
+  // routes/_Layout/posts.tsx
+
+  export const Route = createFileRoute("/_Layout/posts")({
+    component: PostPage,
+    loader: ({ context: { queryClient } }) => {
+      void queryClient.prefetchQuery(postListQueryOptions());
+    },
+  });
+
+  function PostPage() {
+    const { t } = useTranslation("posts");
+
+    return (
+      <Card>
+        <Card.Header>
+          <Typography type="display-4xl">{t("title")}</Typography>
+        </Card.Header>
+        <Card.Content>
+          <PostList />
+        </Card.Content>
+      </Card>
+    );
+  }
+  ```
+
+### Cross-Feature Composition (Escape Hatch)
+
+This pattern lets a **page/route** inject a component from one feature into another (e.g., `PostsListItem` from **Posts** into **Search**).
+
+**⚠️ Use only as a last resort.** Normally, features must not import from each other (enforced by ESLint). Pages are the only place where cross-feature wiring can happen. This avoids moving half-baked components into `src/` (shared) unnecessarily.
+
+**Checklist before using:**
+
+- [ ] A simple **prop/slot** API won’t work
+- [ ] Context is provided at the **page/route** level, not globally
+- [ ] The **contract is minimal and typed** (no leaking feature internals)
+- [ ] There’s a clear **comment why** this escape hatch is needed
+
+**Safer alternatives (if possible):**
+
+- Pass a render function (`itemRenderer`) as a prop
+- Define a tiny **contract type** in `src/` (shared) and keep implementations in features
+
+```tsx
+// src/routes/_Layout/search.tsx
+import { SearchList } from "@/features/search/components/SearchList";
+import { PostsListItem } from "@/features/posts/components/PostsListItem";
+import { PostListItemProvider } from "@/lib/PostListItemContext";
+
+export const Route = createFileRoute("/_Layout/search")({
+  component: SearchPage,
+});
+
+function SearchPage() {
+  const { t } = useTranslation("search");
+  return (
+    <Card>
+      <Card.Header>
+        <Typography type="display-4xl">{t("title")}</Typography>
+      </Card.Header>
+      <Card.Content>
+        <PostListItemProvider postsListItem={PostsListItem}>
+          <SearchList />
+        </PostListItemProvider>
+      </Card.Content>
+    </Card>
+  );
+}
+
+// src/features/search/SearchList.tsx
+export const SearchList = () => {
+  const { t } = useTranslation("search");
+  const PostsListItem = usePostListItem();
+  const { data } = useSuspenseQuery(searchQueryOptions());
+
+  return (
+    <>
+      {!!data.items.length ? (
+        <ul className="divide-y-1">
+          {data.items.map((post) => (
+            <PostsListItem key={post.id} post={post} />
+          ))}
+        </ul>
+      ) : (
+        <Typography className="text-muted-foreground">
+          {t("noResultsMessage")}
+        </Typography>
+      )}
+    </>
+  );
+};
+
+// src/features/posts/providers/PostListItemContext.tsx
+type PostListItemProps = {
+  post: PostType;
+};
+
+type PostListItem = (props: PostListItemProps) => React.ReactNode;
+
+type PostListItemContextValue = {
+  postListItem: PostListItem;
+};
+
+const PostListItemContext = createContext<PostListItemContextValue>(
+  undefined as never,
+);
+
+type PostListItemProviderProps = {
+  postListItem: PostListItem;
+  children: ReactNode;
+};
+
+export const PostListItemProvider = ({
+  postListItem,
+  children,
+}: PostListItemProviderProps) => {
+  return (
+    <PostListItemContext.Provider value={{ postListItem }}>
+      {children}
+    </PostListItemContext.Provider>
+  );
+};
+
+export const usePostListItem = () => {
+  const context = useContext(PostListItemContext);
+  if (!context) {
+    throw new Error(
+      '"usePostListItem" must be used within "PostListItemProvider"',
+    );
+  }
+  return context;
+};
+```
 
 ## Naming Conventions
 
@@ -131,6 +384,44 @@ All **boolean** variables should be named with a "_booleanish_" prefix, like `is
 - **Correct:** `isLoading` ✅
 - **Incorrect:** `loading` ❌
 
+### Function naming
+
+_Borrowed from [kettanaito's naming cheatsheet](https://github.com/kettanaito/naming-cheatsheet)_ and slightly enhanced.
+
+- Use the **A/HC/LC** pattern
+
+```
+prefix? + action (A) + high context (HC) + low context? (LC)
+```
+
+| Name                   | Prefix   | Action (A) | High context (HC) | Low context (LC) |
+| ---------------------- | -------- | ---------- | ----------------- | ---------------- |
+| `getUser`              |          | `get`      | `User`            |                  |
+| `getUserMessages`      |          | `get`      | `User`            | `Messages`       |
+| `handleClickOutside`   |          | `handle`   | `Click`           | `Outside`        |
+| `shouldDisplayMessage` | `should` | `Display`  | `Message`         |                  |
+
+#### Common actions
+
+| Action      | Usage                                                                                                               |
+| ----------- | ------------------------------------------------------------------------------------------------------------------- |
+| `get`       | Accesses data immediately (i.e. shorthand getter of internal data). Or async data - get a resource from the server. |
+| `set`       | Set a variable or state to a new value.                                                                             |
+| `reset`     | Sets a variable back to its initial value or state.                                                                 |
+| `remove`    | Removes something _from_ somewhere. E.g. remove a filter from a collection of selected filters. (_opposite of add_) |
+| `delete`    | Erase something. E.g. delete resource from a database. (_opposite of create_)                                       |
+| `compose`   | Combine multiple functions or elements into one.                                                                    |
+| `handle`    | Respond to an event or trigger, typically prefixed for event callbacks (e.g. `handleClick`).                        |
+| `add`       | Include something in a collection or group.                                                                         |
+| `create`    | Make a new resource, object, or data structure.                                                                     |
+| `format`    | Convert data into a specific or human-readable format.                                                              |
+| `update`    | Change an existing value, state, or record with new information.                                                    |
+| `init`      | Perform initial setup or bootstrapping.                                                                             |
+| `toggle`    | Flip between two states, usually boolean (e.g. show/hide, true/false).                                              |
+| `validate`  | Ensure data meets required rules or structure.                                                                      |
+| `transform` | Convert data from one shape, structure, or format to another.                                                       |
+| `cancel`    | Abort an operation or undo a pending action.                                                                        |
+
 ### Good to Know
 
 - **Constants** include enumerations in the form of string literal union types, such as `type Color = "RED" | "BLUE"`.
@@ -144,6 +435,7 @@ All **boolean** variables should be named with a "_booleanish_" prefix, like `is
 - Destructure **props**.
 - Avoid using **explicit types** (_FC_ or _React.FC_) for component definitions. For more details, [read this article](https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/function_components/).
 - Use arrow functions for component definitions. See the [Coding](#coding) section.
+  - unless you need hoisting (e.g. Tanstack router `Route.component` definition). In that case we need to use function declaration.
 
 ### Example Component
 
@@ -165,6 +457,26 @@ Maintain a consistent flow within components. Whenever possible, follow this ord
 2. Derived state
 3. Handler functions
 4. Side effects (`useEffect`)
+
+### Compound Component Pattern
+
+Compound components are a good React pattern because they **share state implicitly between a parent and its children**, removing the need to pass down lots of props. This makes the API **more flexible and declarative**, since consumers can compose the UI by nesting child components naturally. A big advantage is that you can **omit any child component you don’t need**, keeping the usage **clean, intuitive, and scalable**.
+
+[Example of **Popover compound component** definition](https://git.applifting.cz/frontend/fe-monorepo/-/blob/main/packages/ui/src/components/popover.tsx)
+
+```tsx
+// Usage
+export const PopoverDemo = () => (
+  <Popover>
+    <Popover.Trigger asChild>
+      <Button variant="outline">Open popover</Button>
+    </Popover.Trigger>
+    <Popover.Content className="w-80">
+      <p>Content goes here</p>
+    </Popover.Content>
+  </Popover>
+);
+```
 
 ## TypeScript
 
@@ -196,7 +508,10 @@ Leverage TypeScript's [Utility Types](https://www.typescriptlang.org/docs/handbo
 
 ### Immutability
 
-For all immutable values (e.g., arrays with possible options, map objects, etc.), use `as const` if the value is **implicitly typed**. If the value is **explicitly typed**, `as const` has no effect, so use the `readonly` prefix for arrays or the `Readonly<T>` generic for objects.
+Defining values as immutable in TypeScript helps prevent unintended side effects, makes code easier to reason about, and improves type safety by ensuring data cannot be accidentally changed.
+
+For all immutable values (e.g., arrays with possible options, map objects, etc.), use `as const` if the value is **implicitly typed**.  
+If the value is **explicitly typed**, `as const` has no effect, so we must use it in combination with the `satisfies` operator.
 
 #### Examples
 
@@ -204,33 +519,88 @@ For all immutable values (e.g., arrays with possible options, map objects, etc.)
 
 ```ts
 // Implicitly typed array
-const options = ["option1", "option2", "option3"] as const;
+const immutableColors = ["#ff0000", "#00ff00", "#0000ff"] as const;
+// evaluated as: const immutableColors: readonly ["#ff0000", "#00ff00", "#0000ff"]
 
 // Implicitly typed object
-const categoriesMapping = {
-  category1: "Category 1",
-  category2: "Category 2",
+const colorsMap = {
+  red: "#ff0000",
+  green: "#00ff00",
+  blue: "#0000ff",
 } as const;
+// evaluated as:
+// const immutableColorsMap: {
+//    readonly red: "#ff0000";
+//    readonly green: "#00ff00";
+//    readonly blue: "#0000ff";
+// }
 ```
+
+Both examples above are fully immutable, meaning you cannot do:
+
+- mutate the array (push to it, sort it)
+- assigning a new value to an element by its index
+- adding a new property to the object
+- assigning a new value to a property of the object (works even for deeply nested objects)
 
 ##### Explicitly Typed
 
+But sometimes we need both **immutability** and **explicit types** for typesafety and autocompletion
+
 ```ts
-// Explicitly typed array with `readonly`
-type Option = "option1" | "option2" | "option3";
+// Explicitly typed array with `as const satisfies`
+type Hex = "#ff0000" | "#00ff00" | "#0000ff";
 
-const readonlyOptions: readonly Option[] = ["option1", "option2", "option3"];
+const immutableColors = [
+  "#ff0000",
+  "#00ff00",
+  "#0000ff",
+] as const satisfies Hex[];
+// evaluated as: const immutableColors: ["#ff0000", "#00ff00", "#0000ff"]
+// See the difference from the example above? No `readonly`.
+// Check the Gotchas section below on how to mitigate this
 
-// Explicitly typed object with `Readonly<T>`
-type CategoryMapping = {
-  category1: string;
-  category2: string;
-};
+// Explicitly typed object with `as const satisfies`
+type ColorMap = Record<string, Hex>;
 
-const readonlyCategoriesMapping: Readonly<CategoryMapping> = {
-  category1: "Category 1",
-  category2: "Category 2",
-};
+const immutableColorsMap = {
+  red: "#ff0000",
+  green: "#00ff00",
+  blue: "#0000ff",
+} as const satisfies ColorMap;
+// evaluated as:
+// const immutableColorsMap: {
+//   readonly red: "#ff0000";
+//   readonly green: "#00ff00";
+//   readonly blue: "#0000ff";
+// }
+// The satisfies operator did not change anything = fully immutable
+```
+
+##### Gotchas
+
+TypeScript documentation says:
+
+_The new satisfies operator lets us validate that the type of an expression matches some type, without changing the resulting type of that expression_
+
+Unfortunately this is not true. See how the `satisfies` operator changed the type signature?
+
+```ts
+const immutableColors: readonly ["#ff0000", "#00ff00", "#0000ff"];
+// vs.
+const immutableColors: ["#ff0000", "#00ff00", "#0000ff"];
+// The satisfies operator removes the `readonly` from an array.
+```
+
+**To keep the full immutability and also validate an array against type we must do this:**
+
+```ts
+const immutableColors = [
+  "#ff0000",
+  "#00ff00",
+  "#0000ff",
+] as const satisfies readonly Hex[];
+// evaluated as: const immutableColors: readonly ["#ff0000", "#00ff00", "#0000ff"]
 ```
 
 ### Enumerations
@@ -270,6 +640,102 @@ const currentUserRole: Role = Roles.Admin; // Valid
 | **arrow functions** | function expression / declaration |
 | **async/await**     | promise chaining                  |
 | **named exports**   | default exports                   |
+
+### Functions
+
+#### Do one thing
+
+- A function should focus on a **single responsibility**.
+- Easier to test, reuse, and refactor when isolated.
+- If it’s doing multiple steps (validate + save + notify), break it down.
+
+#### Avoid duplication
+
+- Duplicated logic means duplicated bugs.
+- If you see the same code in 3+ places, extract a helper.
+
+#### Arguments (keep it small)
+
+- **1–2 arguments is ideal.**
+- **3 is a warning sign** → consider splitting into smaller functions.
+- If many arguments are truly needed, use an **options object** and destructure for clarity:
+
+```ts
+function createMenu({ title, body, buttonText, isCancellable }) { ... }
+```
+
+#### No boolean flags
+
+- Boolean params usually mean the function does more than one thing.
+- Calls like `createFile("foo.txt", true)` are unclear.
+- Prefer:
+
+  - **Two explicit functions** (`createFile`, `createTempFile`), or
+  - A **descriptive options object** (`{ isTemporary: true }`).
+
+### Prefer Pure Functions
+
+**Pure functions are:**
+
+- Functions that always return the same output for the same input
+- Free of side effects (they don’t read or mutate external state)
+
+Writing pure functions improves **readability, testability, and predictability**. In React, pure functions can often be defined **outside of the component**, which avoids re-creating them on every render — leading to better performance and cleaner code.
+
+#### Bad example
+
+```tsx
+const ProductList = ({ products, filterText }: Props) => {
+  const filterProducts = () => {
+    return products.filter((p) => p.name.includes(filterText));
+  };
+
+  const filtered = filterProducts();
+
+  return (
+    <ul>
+      {filtered.map((p) => (
+        <li key={p.id}>{p.name}</li>
+      ))}
+    </ul>
+  );
+};
+```
+
+Why it's bad:
+
+- `filterProducts` is defined on every render.
+- It's not pure - it depends on external variables.
+- It's harder to test, reuse, or reason about.
+
+#### Good example
+
+```tsx
+const filterProducts = (products: Product[], filterText: string) => {
+  return products.filter((p) => p.name.includes(filterText));
+};
+
+const ProductList = ({ products, filterText }: Props) => {
+  const filtered = filterProducts(products, filterText);
+
+  return (
+    <ul>
+      {filtered.map((p) => (
+        <li key={p.id}>{p.name}</li>
+      ))}
+    </ul>
+  );
+};
+```
+
+Why it's better:
+
+- `filterProducts` is a pure function: it only depends on its inputs.
+- It lives outside the component and doesn't get recreated on re-renders.
+- It's easier to unit test and reuse elsewhere in the app.
+
+> **Rule of thumb**  
+> If a function doesn't rely on side effects, make it pure and define it outside the component
 
 ### Boolean Conversion
 
@@ -377,6 +843,8 @@ const handleItemsDeclaratively = (items: Item[]) => {
 ### ESLint
 
 - See [FE Monorepo ESLint config](https://git.applifting.cz/frontend/fe-monorepo/-/tree/main/packages/eslint-config).
+- We should **enforce** unidirectional codebase and **forbid cross-feature imports**
+  - See [Import Rules](https://git.applifting.cz/frontend/fe-monorepo/-/blob/main/packages/eslint-config/src/importRules.js) and a [custom solution of `createRestrictedPaths`](https://git.applifting.cz/frontend/fe-monorepo/-/blob/main/packages/eslint-config/src/lib/createRestrictedPaths.js) for automatic discovery of feature folders
 
 ### Prettier
 
@@ -425,47 +893,13 @@ Use comments in the following format:
 
 > `.env` must always be gitignored; `.env.example` should not.
 
-A good utility library for Next.js is [t3-env](https://github.com/t3-oss/t3-env), which helps distinguish between **client** and **server** environment variables.
+A good utility library for both defining and validating **Environment variables** is [T3 Env](https://env.t3.gg).  
+We suggest to use it instead of creating a custom solution. T3 env is **framework agnostic**.
 
-### Vite Example
+For a usage example, you can refer to our FE Monorepo
 
-#### Environment Variables Schema Definition
-
-```ts
-// src/config/env.ts
-import { z } from "zod";
-
-// Define the schema for Vite environment variables
-const viteEnvSchema = z.object({
-  VITE_API_URL: z.string().url(), // Ensures a valid URL string
-  VITE_API_TIMEOUT: z.coerce.number().min(1000).default(5000), // Coerce to number, min 1000, default to 5000
-  VITE_ENABLE_FEATURE_X: z.coerce.boolean().default(false), // Coerce to boolean, default to false
-  VITE_ALLOWED_DOMAINS: z
-    .string()
-    .transform((val) => val.split(",")) // Convert comma-separated string to array
-    .optional(), // Optional environment variable
-  VITE_LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"), // Enum for log levels
-});
-
-// Parse and validate the environment variables
-const parsedEnv = viteEnvSchema.safeParse(import.meta.env);
-
-if (!parsedEnv.success) {
-  console.error("❌ Invalid environment variables:", parsedEnv.error.format());
-  throw new Error("Invalid Vite environment variables");
-}
-
-// Export the validated environment variables
-export const env = parsedEnv.data;
-```
-
-#### Usage in Codebase
-
-```ts
-import { env } from "@/config/env";
-
-console.log("API URL:", env.VITE_API_URL);
-```
+- [Tanstack router SPA example](https://git.applifting.cz/frontend/fe-monorepo/-/blob/main/apps/ts-router/src/config/env.ts)
+- [Next.js example](https://git.applifting.cz/frontend/fe-monorepo/-/blob/main/apps/nextjs/src/config/env.ts)
 
 ## Preferred Libraries
 
@@ -554,15 +988,25 @@ The go-to solution is [react-hook-form](https://react-hook-form.com/) with [zod]
 
 #### Tanstack Query
 
-[Tanstack Query](https://tanstack.com/query/latest) (formerly React Query) is the recommended solution for both REST and GraphQL APIs.
+[Tanstack Query](https://tanstack.com/query/latest) (formerly React Query) is the recommended solution for both **REST** and **GraphQL** APIs.
+
+**Why not Apollo client?**
+
+We discourage using Apollo Client because it hides too much behind GraphQL-specific magic, relying on things like `__typename` and `id` for caching—which breaks easily with missing fields, aliases, or composite keys. Cache updates are imperative and error-prone, especially with nested or paginated data. React Query offers a simpler, API-agnostic approach with flexible keys and declarative cache control, making it more predictable, consistent, and maintainable.
 
 - For REST APIs, use the [ky](https://www.npmjs.com/package/ky) HTTP client.
 - For GraphQL, use the [graphql-request](https://www.npmjs.com/package/graphql-request) client.
 
-> When working with REST APIs, don’t create TypeScript types for response data. Always parse the JSON using a zod schema and infer its type—don’t trust anyone!
+> When working with REST APIs, don’t create TypeScript types for response data. Always parse the JSON using a zod schema and infer its type — don’t trust anyone! (Unless the API is created based on a contract - in that case see [API Types Generators](#api-types-generators))
 
 ```ts
+// src/features/posts/api/postDetailQueryOptions
+import { queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
+
+import { api } from "@/lib/api";
+
+import { postKeys } from "./queryKeys";
 
 const postSchema = z.object({
   userId: z.number(),
@@ -571,33 +1015,151 @@ const postSchema = z.object({
   body: z.string(),
 });
 
-type PostSchema = z.infer<typeof postSchema>;
+export type PostSchema = z.infer<typeof postSchema>;
 
-const useExamplePost = (id: number) => {
-  const result = useQuery<PostSchema>({
-    queryKey: exampleKeys.post(id),
+export const postDetailQueryOptions = (id: number) =>
+  queryOptions({
+    queryKey: postKeys.detail(id),
     queryFn: async () => {
-      const response = await api.get(
-        `https://jsonplaceholder.typicode.com/posts/${id}`,
-      );
-      const data = await response.json();
+      const data = await api.get(`/posts/${id}`).json();
       // Validate and parse the response using the schema
       // Will throw an error if the response shape does not pass schema validation
       return postSchema.parse(data);
     },
   });
-  return result;
-};
+
+// Usage in a component
+const { data, isPending, isError, error } = useQuery(
+  postDetailQueryOptions(id),
+);
 ```
+
+##### Query Keys
 
 To simplify query key management and improve maintainability, it’s recommended to use [Query Key Factories](https://tkdodo.eu/blog/effective-react-query-keys#use-query-key-factories) for each feature.
 
 ```ts
-export const exampleKeys = {
-  posts: ["posts"] as const,
-  post: (id: number) => [...exampleKeys.posts, id] as const,
+// src/features/posts/api/queryKeys
+export const postKeys = {
+  all: () => ["posts"] as const,
+  lists: () => [...postKeys.all(), "list"] as const,
+  list: (filter: PostListFilter) => [...postKeys.lists(), filter] as const,
+  details: () => [...postKeys.all(), "detail"] as const,
+  detail: (id: number) => [...postKeys.details(), id],
 };
 ```
+
+##### Query Options
+
+As shown in the example above, we encourage the usage of `queryOptions` instead of using a custom hook that wraps `useQuery`.  
+It's a much more flexible solution because this way it's possible to use it in many different scenarios:
+
+Standard `useQuery` in a component
+
+```tsx
+const { data, isPending, isError, error } = useQuery(
+  postDetailQueryOptions(id),
+);
+```
+
+In a component with a suspense boundary using `useSuspenseQuery`
+
+```tsx
+const { data } = useSuspenseQuery(postDetailQueryOptions(id));
+```
+
+In a Tanstack router route loader with `queryClient` methods
+
+```tsx
+export const Route = createFileRoute("/_Layout/posts_/$postId")({
+  loader: async ({ context: { queryClient }, params: { postId } }) => {
+    await queryClient.ensureQueryData(postDetailQueryOptions(postId));
+  },
+  component: RouteComponent,
+});
+```
+
+> We won't be able to achieve this flexibility with doing something like `usePostDetail()` custom hook that is just a wrapper around `useQuery` with hardcoded options.
+
+##### Additional notes
+
+- As explained above, we shouldn't create custom wrapper hooks for queries. For mutations, it's completely okay since we don't usually use the mutation options in more places than `useMutation`.
+- If there's a case when you really need to use `useQuery` inside a custom hook, never mix `useQuery` and `useMutation` definitions in a single hook. We should separate operations that read data from operations that mutate data.
+
+#### API Types Generators
+
+We have a good experience with following solutions for generating types for APIs (requests, responses, entities, errors, etc.)
+
+| API Type | Suggested library                                                                                                     |
+| -------- | --------------------------------------------------------------------------------------------------------------------- |
+| GraphQL  | [@graphql-codegen/cli](https://github.com/dotansimha/graphql-code-generator)                                          |
+| REST     | [@openapi-codegen/cli](https://github.com/fabien0102/openapi-codegen) or [orval](https://github.com/orval-labs/orval) |
+
+**Never generate hooks for Tanstack Query**. That will be against the point mentioned above why Apollo client is discouraged. When we generate hooks, we lose the ability of defining our own query keys structure and we basically lose the ownership of the cache. We always want to keep control over our cache and queries/mutations definition.
+
+### Routing
+
+It's suggested to use [Tanstack Router](https://tanstack.com/router/latest) instead of [React Router](https://reactrouter.com/)  
+You can read more details about this decision in [Corplifting's ADR](https://git.applifting.cz/corplifting1/corplifting-frontend/-/blob/main/docs/adr/0008-migrate-from-react-router-to-tanstack-react-router.md)
+To summarize why we think Tanstack Router is superior:
+
+- Better typesafety (path params, search params, route definitions)
+- Awesome integration with [Tanstack Query](#tanstack-query)
+- Tanstack ecosystem - we already have a very pleasant experience with other Tanstack tools (query, table, virtual) and if we decide in the future that we want to build SSR apps with [Tanstack Start](https://tanstack.com/start/latest) it will be very familiar experience since it's mostly a wrapper around Tanstack Router.
+
+#### Tanstack Router patterns
+
+It is possible to easily integrate Tanstack Router and Tanstack Query to have access to `queryClient` inside route loaders. That allows us several features:
+
+- Start fetching data even before a route component begins to render
+- Block rendering of a route till data is fetched (to avoid spinnagedon if the response time is quick)
+- Co-location of data and routes - goes well with our feature-sliced approach
+- Built in suspense and error boundaries - goes well with `useSuspenseQuery`
+
+##### Examples
+
+**Start prefetching a query inside a route loader**  
+Once resolved, it populates our Query Cache
+
+```tsx
+export const Route = createFileRoute("/_Layout/posts_/$postId")({
+  loader: ({ context: { queryClient }, params: { postId } }) => {
+    void queryClient.prefetchQuery(postDetailQueryOptions(postId));
+    // void = we don't care about the data here, we are just triggering the fetch before anything starts to render
+  },
+  component: RouteComponent,
+});
+```
+
+**Fetch data inside a loader**  
+`queryClient.ensureQueryData` is a combination of `.getQueryData()` and `.fetchQuery()`. It means that it first checks whether a data is already in the Query Cache and if not, it starts fetching the data and returns a Promise.  
+This is the most common approach we use in route definitions
+
+```tsx
+export const Route = createFileRoute("/_Layout/posts_/$postId")({
+  component: TestingDeviceDetailPage,
+  loader: ({ context: { queryClient }, params: { postId } }) =>
+    queryClient.ensureQueryData(postDetailQueryOptions(postId)),
+  pendingComponent: TestingDeviceDetailPageSkeleton,
+});
+```
+
+As you can see above, we've defined a `pendingComponent`. That means we are creating a Suspense boundary around our route. Whenever we need the data from `postDetailQueryOptions` in any component in the context of this route, we can just use
+
+```tsx
+const { data } = useSuspenseQuery(postDetailOptions(postId));
+```
+
+No need to check for pending state because that is handled by the suspense boundary and the `pendingComponent`. If we have a global error boundary defined, we don't need to check for error state either. For that see [defaultErrorComponent](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#using-the-default-errorcomponent). `.ensureQueryData()` and `.fetchQuery()` both throw on error which means it triggers the closest error boundary and passes the error into it.
+
+**Route loading state and UI blocking**  
+Tanstack Router is pretty smart about when does it show the `pendingComponent`. Often times, the API response can take just a small fractions of a seconds. It's not pleasant UX to flicker loading spinners or skeletons for just a couple of milliseconds. For that reason TS router shows the `pendingComponent`:
+
+- The pending component is shown only if the API response is taking long (exceeds a threshold, default `1s`)
+- Once the pending component is shown, it stays displayed for a defined time to avoid flashing (default `500ms`)
+- If the threshold is not exceeded, TS router just blocks the UI and keeps showing the previous page
+
+Both these values can be easily configured. To see how and read more about this behavior check [Showing a pending component](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#showing-a-pending-component) and [Avoiding Pending Component Flash](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#avoiding-pending-component-flash) sections.
 
 ### Translations
 
