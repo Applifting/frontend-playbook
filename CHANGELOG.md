@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) for more information on how to structure this file.
 
+## [0.2.0] - 2025-08-22
+
+### Changed
+
+- Fix table of contents
+- Immutability section
+  - update description
+  - provide better examples with gotchas
+- Components section
+  - use arrow function for component definition unless you need hoisting
+- Server State management section
+  - Explain why Apollo client is discouraged
+  - More in-depth explanation of encouraged patterns with Tanstack Query
+  - Better examples of Tanstack Query usage
+  - Better example of query keys factory pattern
+- Environment variables section - just use T3 env
+- Project structure section
+  - Next.js - change example to app router from pages router
+- ESLint - enforce unidirectional codebase with forbidden cross-feature imports
+
+### Added
+
+- Naming functions section inside naming conventions
+- API Types Generation suggested tooling and approach
+- Routing section
+  - Encourage Tanstack Router
+  - Explain and provide examples of TS Router and TS Query integration
+- Components section
+  - Encourage compound component pattern
+- Project structure section
+  - General rules and explanations
+  - Flowchart explaining pages and features relation
+  - TanStack router example
+  - Escape hatch solution with checklist when to use it
+- Coding section
+  - Common function rules
+  - Pure functions section
+- Metadata frontmatter
+
 ## [0.1.5] - 2025-07-10
 
 ### Changed
