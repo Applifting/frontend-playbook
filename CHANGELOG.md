@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) for more information on how to structure this file.
 
+## [0.2.1](https://git.applifting.cz/frontend/style-guide/-/compare/v0.2.0...v0.2.1) - 2025-08-29
+
+### Added
+
+- ky HTTP client integration and style guide documentation
+  - Introduce best practices and usage patterns for HTTP requests using the ky package, emphasizing encapsulation with custom hooks and options for improved testability, maintainability, and reuse.
+
+- Public and private API client examples
+  - Document standardized patterns for creating both unauthenticated and authenticated API clients via ky, with examples for adding headers, prefix URLs, and retry logic.
+
+- Token refresh workflow using retry hooks
+  - Provide guidance on handling authentication, including automatic token refresh via beforeRetry hooks when encountering expired or invalid tokens.
+
+- TanStack Query integration tip
+  - Add notes on configuring TanStack Query to disable its automatic retries, avoiding double retry logic when used with ky.
+
 ## [0.2.0](https://git.applifting.cz/frontend/style-guide/-/compare/v0.1.5...v0.2.0) - 2025-08-22
 
 ### Changed
