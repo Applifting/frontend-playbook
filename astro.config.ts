@@ -65,7 +65,9 @@ export default defineConfig({
 				light: "/src/assets/logo-black.svg",
 				dark: "/src/assets/logo-white.svg",
 			},
-			editLink: { baseUrl: "https://github.com/Applifting/frontend-playbook" },
+			editLink: {
+				baseUrl: "https://github.com/Applifting/frontend-playbook/tree/main",
+			},
 			social: [
 				{
 					icon: "github",
