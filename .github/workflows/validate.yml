@@ -1,0 +1,39 @@
+name: Validate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Lint, Format, Typecheck, Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout
+        uses: actions/checkout@v6
+
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: 🧰 Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: ".nvmrc"
+          cache: pnpm
+
+      - name: 📥 Install deps
+        run: pnpm i --frozen-lockfile
+
+      - name: 🎨 Format
+        run: pnpm format:check
+
+      - name: 🧹 Lint
+        run: pnpm lint:check
+
+      - name: 🧪 Typecheck
+        run: pnpm typecheck
+
+      - name: 🏗️ Build
+        run: pnpm build

@@ -1,4 +1,7 @@
-# Changelog
+---
+title: Changelog
+description: Release notes for Applifting Frontend Playbook
+---
 
 ## 1.0.0
 
