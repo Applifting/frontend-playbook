@@ -10,7 +10,25 @@ import AppliftersOnly from '@/components/AppliftersOnly.astro'
 
 <AppliftersOnly />
 
-Compound components are a good React pattern because they **share state implicitly between a parent and its children**, removing the need to pass down lots of props. This makes the API **more flexible and declarative**, since consumers can compose the UI by nesting child components naturally. A big advantage is that you can **omit any child component you don't need**, keeping the usage **clean, intuitive, and scalable**.
+## Why Compound Components?
+
+The compound component pattern solves a common problem: **components that grow too many props**. Instead of passing numerous configuration options to a single component, you split functionality into smaller subcomponents that work together and share state implicitly.
+
+**When to use it:**
+
+- Components with multiple related parts (tabs, accordions, dropdowns, modals)
+- When you need flexible composition — users can rearrange, omit, or extend subcomponents
+- When a single component would require many props to configure all its parts
+
+**Benefits:**
+
+- **Reduced prop drilling** — state is shared implicitly via context
+- **Flexible API** — consumers compose the UI declaratively by nesting children
+- **Separation of concerns** — each subcomponent handles its own rendering logic
+
+For a deeper dive, see the excellent [Compound Pattern](https://www.patterns.dev/react/compound-pattern/) article on patterns.dev.
+
+## Example
 
 ```tsx
 // Usage
