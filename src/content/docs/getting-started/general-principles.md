@@ -10,9 +10,19 @@ lastUpdated: 2025-12-03
 
 **Code should be self-explanatory**. If a developer (including yourself) revisits the code months later, it should be easy to understand at a glance. Prefer clear, meaningful variable and function names over complex logic.
 
-## Reusability
+## Reusability (DRY & AHA)
 
-Follow the [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) (Don't Repeat Yourself) principle. Create reusable components and utilities whenever possible to avoid duplication and reduce maintenance.
+The [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) (Don't Repeat Yourself) principle encourages creating reusable components and utilities to avoid duplication and reduce maintenance. However, **DRY shouldn't be followed dogmatically**.
+
+Enter [AHA](https://kentcdodds.com/blog/aha-programming#aha-) — **Avoid Hasty Abstractions**. The idea is simple: don't abstract too early. Abstraction should bring clear value — improved readability, reduced bugs, or easier maintenance — not come at the cost of over-engineering or hurting code clarity.
+
+> **Rule of thumb:** Don't abstract unless the pattern repeats **at least 3 times**. When in doubt, prefer duplication over the wrong abstraction.
+
+Key principles to keep in mind:
+
+- **Optimize for change first** — code that's easy to modify beats premature abstraction
+- **Prefer duplication over the wrong abstraction** — it's easier to abstract duplicated code later than to untangle a bad abstraction
+- **Keep AHA over DRY** — a little repetition is better than a complex, hard-to-understand abstraction
 
 ## Separation of Concerns
 
