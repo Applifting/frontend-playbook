@@ -3,6 +3,9 @@ dist/
 # generated types
 .astro/
 
+# generated changelog (synced from root CHANGELOG.md via prebuild/predev)
+src/content/docs/changelog.md
+
 # dependencies
 node_modules/
 

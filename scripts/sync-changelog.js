@@ -19,6 +19,7 @@ const withoutFirstTwoLines = lines.slice(2).join("\n")
 const frontmatter = `---
 title: Changelog
 description: Release notes for Applifting Frontend Playbook
+editUrl: false
 ---
 
 `
