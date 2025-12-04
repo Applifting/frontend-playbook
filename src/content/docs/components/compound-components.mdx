@@ -1,0 +1,27 @@
+---
+title: Compound Component Pattern
+description: 'The compound component pattern for flexible, declarative APIs with implicit state sharing.'
+sidebar:
+  order: 4.3
+lastUpdated: 2025-12-03
+---
+
+import AppliftersOnly from '@/components/AppliftersOnly.astro'
+
+<AppliftersOnly />
+
+Compound components are a good React pattern because they **share state implicitly between a parent and its children**, removing the need to pass down lots of props. This makes the API **more flexible and declarative**, since consumers can compose the UI by nesting child components naturally. A big advantage is that you can **omit any child component you don't need**, keeping the usage **clean, intuitive, and scalable**.
+
+```tsx
+// Usage
+export const PopoverDemo = () => (
+  <Popover>
+    <Popover.Trigger asChild>
+      <Button variant="outline">Open popover</Button>
+    </Popover.Trigger>
+    <Popover.Content className="w-80">
+      <p>Content goes here</p>
+    </Popover.Content>
+  </Popover>
+);
+```

@@ -1,0 +1,31 @@
+---
+title: Next.js Structure
+description: 'Recommended Next.js project structure using App Router with feature-sliced design principles.'
+sidebar:
+  order: 2.3
+lastUpdated: 2025-12-03
+---
+
+import { FileTree } from '@astrojs/starlight/components';
+
+All information mentioned in [Pages & Routes (Common Concepts)](../pages-routes) applies.
+
+- **App Router (Preferred)**  
+  Use the `app/` directory for routing in new projects. Each route file under `app/` is a page, where you should apply the rules above (composition, headings, layout, etc.).
+- **Pages Router (Legacy)**  
+  The `pages/` directory can still be used in existing projects. Keep the standard structure, and remember:
+  - Business logic for SSR/SSG (getServerSideProps, getStaticProps) must remain in the `pages/` directory, as it won’t work elsewhere.
+
+## Example Structure
+
+<FileTree>
+- src/
+  - app/
+    - posts/
+      - page.tsx                  # Page component that composes feature widgets
+  - features/
+    - posts/
+      - components/               # Posts-specific components
+        - PostList.tsx            # Posts list component
+      - hooks/                    # Posts-specific hooks
+</FileTree>

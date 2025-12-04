@@ -1,0 +1,44 @@
+---
+title: Applifting Frontend Playbook
+description: "Opinionated guidelines for frontend projects at Applifting — from React patterns and TypeScript tips to data fetching, routing, and workflow." 
+template: splash
+lastUpdated: 2025-12-03
+hero:
+  tagline: 'Opinionated guidelines for frontend projects at <a href="https://applifting.io" rel="noopener" target="_blank">Applifting</a> — from React patterns and TypeScript tips to data fetching, routing, and workflow.'
+  actions:
+    - text: Get started
+      link: './getting-started/introduction'
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/Applifting/frontend-playbook
+      icon: external
+      variant: minimal
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+import pkg from '../../../package.json'
+
+## What’s inside
+
+<CardGrid>
+  <LinkCard title="How we write code" href="./coding-patterns/function-best-practices/" description="Function and component best practices, pure vs. impure functions, declarative patterns, Type vs interface, naming conventions, immutability, and boolean naming." />
+  <LinkCard title="How we structure apps" href="./project-structure/feature-sliced-design-overview/" description="Feature-sliced design, pages vs. features, TanStack Router patterns, query keys & options, and how routing, data fetching, and features fit together." />
+  <LinkCard title="How we work together" href="./contributing/git-workflow/" description="Git workflow & merge requests, environment variables, shared UI with shadcn/ui & Tailwind, i18n, and API type generators." />
+</CardGrid>
+
+---
+
+## What we care about
+
+- **Readable, self-explanatory code** instead of clever tricks.
+- **Single responsibility & separation of concerns** for functions, components,
+  hooks, and features.
+- **Typed and immutable by default** — no `any`, careful enums, and safe
+  constants.
+- **Declarative, side-effect aware React** with pure functions, clear data
+  flow, and proper error handling.
+- **Consistent project structure** so moving between codebases feels familiar.
+
+---
+
+v{pkg.version} · Maintained by the [Applifting](https://applifting.io) Frontend Guild · [Changelog](./changelog)

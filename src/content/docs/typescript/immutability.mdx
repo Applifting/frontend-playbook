@@ -1,0 +1,106 @@
+---
+title: Immutability
+description: "Using 'as const' and 'satisfies' for immutable, type-safe values in TypeScript."
+sidebar:
+  order: 5.3
+lastUpdated: 2025-12-03
+---
+
+import { Aside } from "@astrojs/starlight/components"
+
+Defining values as immutable in TypeScript helps prevent unintended side effects, makes code easier to reason about, and improves type safety by ensuring data cannot be accidentally changed.
+
+For all immutable values (e.g., arrays with possible options, map objects, etc.), use `as const` if the value is **implicitly typed**.  
+If the value is **explicitly typed**, `as const` has no effect, so we must use it in combination with the `satisfies` operator.
+
+## Implicitly Typed
+
+```ts
+// Implicitly typed array
+const immutableColors = ["#ff0000", "#00ff00", "#0000ff"] as const;
+// evaluated as: const immutableColors: readonly ["#ff0000", "#00ff00", "#0000ff"]
+
+// Implicitly typed object
+const colorsMap = {
+  red: "#ff0000",
+  green: "#00ff00",
+  blue: "#0000ff",
+} as const;
+// evaluated as:
+// const immutableColorsMap: {
+//    readonly red: "#ff0000";
+//    readonly green: "#00ff00";
+//    readonly blue: "#0000ff";
+// }
+```
+
+Both examples above are fully immutable, meaning you cannot do:
+
+- mutate the array (push to it, sort it)
+- assigning a new value to an element by its index
+- adding a new property to the object
+- assigning a new value to a property of the object (works even for deeply nested objects)
+
+## Explicitly Typed
+
+But sometimes we need both **immutability** and **explicit types** for typesafety and autocompletion
+
+```ts
+// Explicitly typed array with `as const satisfies`
+type Hex = "#ff0000" | "#00ff00" | "#0000ff";
+
+const immutableColors = [
+  "#ff0000",
+  "#00ff00",
+  "#0000ff",
+] as const satisfies Hex[];
+// evaluated as: const immutableColors: ["#ff0000", "#00ff00", "#0000ff"]
+// See the difference from the example above? No `readonly`.
+// Check the Gotchas section below on how to mitigate this
+
+// Explicitly typed object with `as const satisfies`
+type ColorMap = Record<string, Hex>;
+
+const immutableColorsMap = {
+  red: "#ff0000",
+  green: "#00ff00",
+  blue: "#0000ff",
+} as const satisfies ColorMap;
+// evaluated as:
+// const immutableColorsMap: {
+//   readonly red: "#ff0000";
+//   readonly green: "#00ff00";
+//   readonly blue: "#0000ff";
+// }
+// The satisfies operator did not change anything = fully immutable
+```
+
+## Gotchas
+
+TypeScript documentation says:
+
+_The new satisfies operator lets us validate that the type of an expression matches some type, without changing the resulting type of that expression_
+
+Unfortunately this is not true. See how the `satisfies` operator changed the type signature?
+
+```ts
+const immutableColors: readonly ["#ff0000", "#00ff00", "#0000ff"];
+// vs.
+const immutableColors: ["#ff0000", "#00ff00", "#0000ff"];
+// The satisfies operator removes the `readonly` from an array.
+```
+
+**To keep the full immutability and also validate an array against type we must do this:**
+
+```ts
+const immutableColors = [
+  "#ff0000",
+  "#00ff00",
+  "#0000ff",
+] as const satisfies readonly Hex[];
+// evaluated as: const immutableColors: readonly ["#ff0000", "#00ff00", "#0000ff"]
+```
+
+<Aside type="tip">
+  If you are interested for a more in-depth read on this topic, consider reading [Immutable by Default: Practical TypeScript Patterns](https://marekhonzal.com/blog/immutable-by-default-typescript) article.
+</Aside>

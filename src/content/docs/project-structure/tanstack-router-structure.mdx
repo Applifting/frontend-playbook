@@ -1,0 +1,82 @@
+---
+title: TanStack Router (or React Router)
+description: 'Project structure for TanStack Router apps with file-based routing and feature-sliced design.'
+sidebar:
+  order: 2.4
+lastUpdated: 2025-12-03
+---
+
+import { FileTree } from '@astrojs/starlight/components';
+
+All information mentioned in [Pages & Routes (Common Concepts)](../pages-routes) applies.
+
+In TanStack Router (or React Router) applications, organize route files following the file-based routing pattern:
+
+- **Routes Directory**  
+  Create route files directly in the routes directory (e.g., `routes/_Layout/posts/index.tsx`).
+- **Route Loaders**  
+  Keep route-specific data fetching logic in the route file using `loader` functions.
+
+## Example Structure
+
+<FileTree>
+  - src/
+    - components/
+      - ui/
+        - Card.tsx            # Shared UI component
+    - app/                    # Application configuration
+      - Providers.tsx         # Global providers (RouterProvider, etc.)
+      - router.tsx            # TanStack Router configuration
+      - routes.ts             # Route constants and type definitions
+    - routes/
+      - __root.tsx            # Root route component
+      - _Layout.tsx           # Main layout route
+      - _Layout/              # Nested routes under main layout
+        - posts/
+          - index.tsx         # Route definition of posts feature with loader and component
+        - search/
+          - index.tsx         # Route definition of search feature with component
+      - login.tsx             # Login page route
+    - features/
+      - posts/
+        - api/                # Query keys and query options for posts API calls
+        - components/         # Posts-specific components
+          - PostList.tsx      # Posts list component
+          - PostListItem.tsx  # Posts list item component
+        - hooks/              # Posts-specific hooks
+      - search/
+        - api/                # Query keys and query options for search API calls
+        - components/         # Search-specific components
+          - SearchList.tsx    # Search list component
+        - hooks/              # Search-specific hooks
+    - lib/
+      - PostListItemContext.tsx
+</FileTree>
+
+## Example Route
+
+  ```tsx
+  // routes/_Layout/posts.tsx
+
+  export const Route = createFileRoute("/_Layout/posts")({
+    component: PostPage,
+    loader: ({ context: { queryClient } }) => {
+      void queryClient.prefetchQuery(postListQueryOptions());
+    },
+  });
+
+  function PostPage() {
+    const { t } = useTranslation("posts");
+
+    return (
+      <Card>
+        <Card.Header>
+          <Typography type="display-4xl">{t("title")}</Typography>
+        </Card.Header>
+        <Card.Content>
+          <PostList />
+        </Card.Content>
+      </Card>
+    );
+  }
+  ```

@@ -1,0 +1,19 @@
+---
+title: Router Choice
+description: 'Why we recommend TanStack Router over React Router for better typesafety and ecosystem integration.'
+sidebar:
+  order: 10.1
+lastUpdated: 2025-12-03
+---
+
+import AppliftersOnly from '@/components/AppliftersOnly.astro'
+
+It's suggested to use [Tanstack Router](https://tanstack.com/router/latest) instead of [React Router](https://reactrouter.com/)  
+
+<AppliftersOnly />
+
+To summarize why we think Tanstack Router is superior:
+
+- Better typesafety (path params, search params, route definitions)
+- Awesome integration with [Tanstack Query](./data-fetching/tanstack-query-overview/)
+- Tanstack ecosystem - we already have a very pleasant experience with other Tanstack tools (query, table, virtual) and if we decide in the future that we want to build SSR apps with [Tanstack Start](https://tanstack.com/start/latest) it will be very familiar experience since it's mostly a wrapper around Tanstack Router.
