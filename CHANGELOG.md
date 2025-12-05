@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2
+
+### Patch Changes
+
+- c7e3402: Add new page "Build with AI" explaining how to integrate this Frontend Playbook with AI tools
+- c5a7a82: Add new frontmatter property `isInLLMs` to easily determine what should be included in llms.txt
+
 ## 1.0.1
 
 ### Patch Changes
@@ -26,15 +33,12 @@
 ### Added
 
 - ky HTTP client integration and style guide documentation
-
   - Introduce best practices and usage patterns for HTTP requests using the ky package, emphasizing encapsulation with custom hooks and options for improved testability, maintainability, and reuse.
 
 - Public and private API client examples
-
   - Document standardized patterns for creating both unauthenticated and authenticated API clients via ky, with examples for adding headers, prefix URLs, and retry logic.
 
 - Token refresh workflow using retry hooks
-
   - Provide guidance on handling authentication, including automatic token refresh via beforeRetry hooks when encountering expired or invalid tokens.
 
 - TanStack Query integration tip
