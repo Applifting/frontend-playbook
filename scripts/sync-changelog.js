@@ -20,6 +20,7 @@ const frontmatter = `---
 title: Changelog
 description: Release notes for Applifting Frontend Playbook
 editUrl: false
+isInLLMs: false
 ---
 
 `
