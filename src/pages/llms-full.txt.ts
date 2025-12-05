@@ -6,7 +6,7 @@ const sortedDocs = docs
 	.toSorted(
 		(a, b) => Number(a.data.sidebar.order) - Number(b.data.sidebar.order),
 	)
-	.filter((doc) => !!doc.data.sidebar.order)
+	.filter((doc) => doc.data.isInLLMs)
 
 export const GET: APIRoute = async () => {
 	return new Response(
