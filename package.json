@@ -21,17 +21,17 @@
 	},
 	"dependencies": {
 		"@astrojs/check": "^0.9.6",
-		"@astrojs/starlight": "^0.37.0",
-		"astro": "^5.16.4",
+		"@astrojs/starlight": "^0.37.1",
+		"astro": "^5.16.6",
 		"astro-mermaid": "^1.2.0",
 		"mermaid": "^11.12.2",
 		"sharp": "^0.34.2"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.3.8",
+		"@biomejs/biome": "^2.3.10",
 		"@changesets/cli": "^2.29.8",
-		"@commitlint/cli": "^20.1.0",
-		"@commitlint/config-conventional": "^20.0.0",
+		"@commitlint/cli": "^20.2.0",
+		"@commitlint/config-conventional": "^20.2.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.2.7",
 		"typescript": "^5.9.3"
