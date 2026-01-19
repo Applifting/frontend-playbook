@@ -2,7 +2,7 @@
 title: HTTP Client with ky
 description: 'Using ky HTTP client with custom hooks, authentication handling, and automatic token refresh.'
 sidebar:
-  order: 9.2
+  order: 10.2
 lastUpdated: 2025-12-03
 ---
 

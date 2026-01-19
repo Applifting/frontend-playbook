@@ -2,7 +2,7 @@
 title: Translations
 description: 'Setting up i18n with react-i18next or next-intl. Covers namespaces, hooks usage, and nested translation keys.'
 sidebar:
-  order: 11.2
+  order: 12.2
 lastUpdated: 2025-12-03
 ---
 

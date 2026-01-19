@@ -2,7 +2,7 @@
 title: Git Workflow
 description: 'Git workflow standards: branch naming, commit messages following conventional commits, and JIRA integration.'
 sidebar:
-  order: 12.1
+  order: 13.1
 lastUpdated: 2025-12-03
 ---
 

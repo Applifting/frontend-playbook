@@ -109,6 +109,10 @@ export default defineConfig({
 					autogenerate: { directory: "ui-styling" },
 				},
 				{
+					label: "HTML & Accessibility",
+					autogenerate: { directory: "html-accessibility" },
+				},
+				{
 					label: "Data Fetching",
 					autogenerate: { directory: "data-fetching" },
 				},

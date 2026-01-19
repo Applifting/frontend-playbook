@@ -2,7 +2,7 @@
 title: Query Keys & Options
 description: 'Patterns for query key factories and queryOptions to keep data fetching flexible and maintainable.'
 sidebar:
-  order: 9.3
+  order: 10.3
 lastUpdated: 2025-12-03
 ---
 

@@ -2,7 +2,7 @@
 title: TanStack Router Patterns
 description: 'Integrating TanStack Router with TanStack Query: loaders, prefetching, suspense boundaries, and pending states.'
 sidebar:
-  order: 10.2
+  order: 11.2
 lastUpdated: 2025-12-03
 ---
 

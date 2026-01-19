@@ -2,7 +2,7 @@
 title: API Type Generators
 description: 'Recommended tools for generating TypeScript types from GraphQL schemas and OpenAPI specifications.'
 sidebar:
-  order: 9.4
+  order: 10.4
 lastUpdated: 2025-12-03
 ---
 

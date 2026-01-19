@@ -2,7 +2,7 @@
 title: TanStack Query Overview
 description: 'Why TanStack Query is our go-to for REST and GraphQL. Includes Apollo Client comparison and zod validation patterns.'
 sidebar:
-  order: 9.1
+  order: 10.1
 lastUpdated: 2025-12-03
 ---
 

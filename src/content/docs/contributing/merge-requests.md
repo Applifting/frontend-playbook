@@ -2,7 +2,7 @@
 title: Merge Requests
 description: 'Merge request conventions: naming, squashing commits, review process, and conventional comments format.'
 sidebar:
-  order: 12.2
+  order: 13.2
 lastUpdated: 2025-12-03
 ---
 
