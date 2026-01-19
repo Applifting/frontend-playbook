@@ -1,13 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="365" height="765"><svg width="365" height="765" viewBox="0 0 365 765" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><style>
+    #light-icon {
+      display: inline;
+    }
+    #dark-icon {
+      display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #light-icon {
+        display: none;
+      }
+      #dark-icon {
+        display: inline;
+      }
+    }
+  </style><g id="light-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g clip-path="url(#SvgjsClipPath1125)"><rect width="1000" height="1000" fill="#ffffff"></rect><g transform="matrix(1.1764705882352942,0,0,1.1764705882352942,285.2941176470588,50)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="365" height="765"><svg width="365" height="765" viewBox="0 0 365 765" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_2123_456)">
 <path d="M364.169 385.924H281.067L259.748 336.323H104.421L83.1019 385.924H0L169.685 0H194.92L364.169 385.924ZM131.397 272.801H231.902L182.302 144.884L131.397 272.801Z" fill="#14141F"></path>
 <path d="M286.288 531.243C287.158 542.555 286.288 553.433 283.678 563.44C283.243 566.05 282.373 568.226 281.937 570.401C281.937 570.836 281.502 571.706 281.502 572.142L280.197 576.057L254.962 648.282C254.092 650.457 250.611 650.457 250.176 648.282L241.909 624.787L240.169 619.566C237.558 611.735 226.246 612.17 224.071 620.001L219.72 636.535L185.348 761.84C184.478 764.451 180.997 764.451 180.127 761.84L145.755 636.535L141.404 620.001C139.228 612.17 127.916 611.735 125.306 619.566L123.565 624.787L115.299 648.282C114.428 650.457 110.948 650.457 110.513 648.282L85.2774 575.187C84.8423 574.317 84.4072 573.012 84.4072 572.142C83.9721 570.836 83.537 569.531 83.102 568.226C82.6669 566.485 82.2318 564.745 81.7967 563.005C80.0563 555.173 79.1862 547.341 79.1862 539.075C79.1862 479.468 129.221 431.608 189.699 435.089C240.169 438.569 282.373 479.903 286.288 531.243Z" fill="#14141F"></path>
 </g>
 <defs>
-<clipPath id="SvgjsClipPath1110">
+<clipPath id="clip0_2123_456">
+<rect width="364.169" height="764.016" fill="white"></rect>
+</clipPath>
+<clipPath id="SvgjsClipPath1125"><rect width="1000" height="1000" x="0" y="0" rx="500" ry="500"></rect></clipPath></defs>
+</svg></svg></g></g></svg></g><g id="dark-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g><g transform="matrix(1.3071895424836601,0,0,1.3071895424836601,261.437908496732,0)" style="filter: invert(100%)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="365" height="765"><svg width="365" height="765" viewBox="0 0 365 765" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_2123_456)">
+<path d="M364.169 385.924H281.067L259.748 336.323H104.421L83.1019 385.924H0L169.685 0H194.92L364.169 385.924ZM131.397 272.801H231.902L182.302 144.884L131.397 272.801Z" fill="#14141F"></path>
+<path d="M286.288 531.243C287.158 542.555 286.288 553.433 283.678 563.44C283.243 566.05 282.373 568.226 281.937 570.401C281.937 570.836 281.502 571.706 281.502 572.142L280.197 576.057L254.962 648.282C254.092 650.457 250.611 650.457 250.176 648.282L241.909 624.787L240.169 619.566C237.558 611.735 226.246 612.17 224.071 620.001L219.72 636.535L185.348 761.84C184.478 764.451 180.997 764.451 180.127 761.84L145.755 636.535L141.404 620.001C139.228 612.17 127.916 611.735 125.306 619.566L123.565 624.787L115.299 648.282C114.428 650.457 110.948 650.457 110.513 648.282L85.2774 575.187C84.8423 574.317 84.4072 573.012 84.4072 572.142C83.9721 570.836 83.537 569.531 83.102 568.226C82.6669 566.485 82.2318 564.745 81.7967 563.005C80.0563 555.173 79.1862 547.341 79.1862 539.075C79.1862 479.468 129.221 431.608 189.699 435.089C240.169 438.569 282.373 479.903 286.288 531.243Z" fill="#14141F"></path>
+</g>
+<defs>
+<clipPath id="clip0_2123_456">
 <rect width="364.169" height="764.016" fill="white"></rect>
 </clipPath>
 </defs>
-</svg><style>@media (prefers-color-scheme: light) { :root { filter: none; } }
-@media (prefers-color-scheme: dark) { :root { filter: contrast(0.3846153846153846) brightness(4.5); } }
-</style></svg>
+</svg></svg></g></g></svg></g></svg>

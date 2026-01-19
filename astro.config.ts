@@ -12,14 +12,14 @@ export default defineConfig({
 		mermaid(),
 		starlight({
 			title: "Frontend Playbook",
-			favicon: `${base}favicon.svg`,
+			favicon: "favicon.svg",
 			head: [
 				{
 					tag: "link",
 					attrs: {
 						rel: "icon",
 						type: "image/png",
-						href: `${base}favicon-96x96.png`,
+						href: "favicon-96x96.png",
 						sizes: "96x96",
 					},
 				},
@@ -28,14 +28,14 @@ export default defineConfig({
 					attrs: {
 						rel: "icon",
 						type: "image/svg+xml",
-						href: `${base}favicon.svg`,
+						href: "favicon.svg",
 					},
 				},
 				{
 					tag: "link",
 					attrs: {
 						rel: "shortcut icon",
-						href: `${base}favicon.ico`,
+						href: "favicon.ico",
 					},
 				},
 				{
@@ -43,7 +43,7 @@ export default defineConfig({
 					attrs: {
 						rel: "apple-touch-icon",
 						sizes: "180x180",
-						href: `${base}apple-touch-icon.png`,
+						href: "apple-touch-icon.png",
 					},
 				},
 				{
@@ -57,7 +57,7 @@ export default defineConfig({
 					tag: "link",
 					attrs: {
 						rel: "manifest",
-						href: `${base}site.webmanifest`,
+						href: "site.webmanifest",
 					},
 				},
 			],
