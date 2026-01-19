@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0
+
+### Minor Changes
+
+- 8daae0e: Add 2 new sections: Semantic HTML elements, Accessibility (a11y)
+
 ## 1.0.2
 
 ### Patch Changes
