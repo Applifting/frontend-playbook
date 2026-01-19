@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1
+
+### Patch Changes
+
+- 8562d9f: Fix "Semantic HTML" url in "Accessibility" page
+
 ## 1.1.0
 
 ### Minor Changes
