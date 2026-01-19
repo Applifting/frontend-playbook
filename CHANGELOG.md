@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.2
+
+### Patch Changes
+
+- 98164b2: fix missing favicon issue - incorrect base url
+
 ## 1.1.1
 
 ### Patch Changes
