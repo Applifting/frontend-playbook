@@ -59,7 +59,7 @@ Native elements like `<button>`, `<a>`, `<input>` come with built-in accessibili
 <button onClick={handleClick}>Submit</button>
 ```
 
-See [Semantic HTML](./semantic-html/) for more on choosing the right elements.
+See [Semantic HTML](../semantic-html/) for more on choosing the right elements.
 
 ## Forms need labels
 
