@@ -1,0 +1,227 @@
+---
+import { Icon } from "@astrojs/starlight/components"
+
+const { id } = Astro.locals.starlightRoute
+const siteUrl = Astro.site?.origin
+const baseUrl = import.meta.env.BASE_URL
+
+const markdownUrl = `${siteUrl}${baseUrl}${id}.md`
+const chatgptUrl = `https://chatgpt.com/?hints=search&q=Read+${encodeURIComponent(markdownUrl)},+I+want+to+ask+questions+about+it.`
+const claudeUrl = `https://claude.ai/new?q=Read+${encodeURIComponent(markdownUrl)},+I+want+to+ask+questions+about+it.`
+---
+
+<div class="actions-container">
+	<button class="action-button" id="copy-markdown" data-markdown-url={markdownUrl} aria-label="Copy markdown to clipboard">
+		<Icon name="document" size="1rem" class="icon-default" />
+		<Icon name="approve-check" size="1rem" class="icon-success" />
+		<Icon name="error" size="1rem" class="icon-error" />
+		<span>Copy Markdown</span>
+	</button>
+
+	<div class="dropdown">
+		<button type="button" class="action-button" id="dropdown-toggle" aria-label="More options">
+			<span class="caret">
+				<Icon name="down-caret" size="1rem" />
+			</span>
+		</button>
+
+		<div class="dropdown-menu">
+			<button type="button" class="dropdown-item" data-markdown-url={markdownUrl} aria-label="Copy markdown link">
+				<span>Copy Markdown link</span>
+			</button>
+			<a href={chatgptUrl} class="dropdown-item" target="_blank" rel="noopener noreferrer">
+				<span>Open in ChatGPT</span>
+				<Icon name="external" size="1rem" class="external-icon" />
+			</a>
+			<a href={claudeUrl} class="dropdown-item" target="_blank" rel="noopener noreferrer">
+				<span>Open in Claude</span>
+				<Icon name="external" size="1rem" class="external-icon" />
+			</a>
+		</div>
+	</div>
+</div>
+
+<style>
+	.actions-container {
+		display: flex;
+		gap: 0.5rem;
+		vertical-align: middle;
+	}
+
+	.action-button {
+		background-color: var(--sl-color-gray-6);
+		color: var(--sl-color-white);
+		border: 1px solid var(--sl-color-gray-5);
+		padding: 0.5rem 0.75rem;
+		border-radius: 0.25rem;
+		font-size: 0.875rem;
+		font-weight: 500;
+		cursor: pointer;
+		font-family: var(--sl-font);
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		transition: opacity 0.2s ease, background-color 0.15s ease, border-color 0.15s ease;
+		height: 2rem;
+		line-height: 1;
+	}
+
+	.action-button:hover {
+		background-color: var(--sl-color-gray-5);
+		border-color: var(--sl-color-gray-4);
+	}
+
+	#copy-markdown:disabled {
+		opacity: 0.7;
+	}
+
+	.icon-success,
+	.icon-error {
+		display: none;
+	}
+
+	#copy-markdown.copied .icon-default,
+	#copy-markdown.error .icon-default {
+		display: none;
+	}
+
+	#copy-markdown.copied .icon-success {
+		display: block;
+		color: var(--sl-color-green);
+	}
+
+	#copy-markdown.error .icon-error {
+		display: block;
+	}
+
+	.dropdown {
+		position: relative;
+	}
+
+	.caret {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.caret svg {
+		transition: transform 0.2s ease;
+	}
+
+	.dropdown.open .caret svg {
+		transform: rotate(180deg);
+	}
+
+	.dropdown-menu {
+		position: absolute;
+		top: calc(100% + 0.5rem);
+		right: 0;
+		background-color: var(--sl-color-gray-6);
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.25rem;
+		padding: 0.25rem;
+		min-width: 200px;
+		box-shadow:
+			0 4px 6px -1px rgba(0, 0, 0, 0.3),
+			0 2px 4px -1px rgba(0, 0, 0, 0.2);
+		display: none;
+		z-index: 10;
+	}
+
+	.dropdown-menu.show {
+		display: block;
+	}
+
+	.dropdown-item {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 0.75rem;
+		width: 100%;
+		padding: 0.5rem 0.75rem;
+		color: var(--sl-color-white);
+		text-decoration: none;
+		border: none;
+		background: none;
+		border-radius: 0.25rem;
+		font-size: 0.875rem;
+		font-family: var(--sl-font);
+		text-align: left;
+		transition: background-color 0.15s ease;
+		cursor: pointer;
+	}
+
+	.dropdown-item:hover {
+		background-color: var(--sl-color-gray-5);
+	}
+
+	.dropdown-item span {
+		flex: 1;
+	}
+
+	.dropdown-item .external-icon {
+		margin-left: auto;
+	}
+</style>
+
+<script>
+	const copyButton = document.querySelector("#copy-markdown") as HTMLButtonElement | null
+	const dropdownToggle = document.querySelector("#dropdown-toggle") as HTMLButtonElement | null
+
+	const FEEDBACK_DURATION = 2000
+
+	function getDropdownFromToggle(btn: HTMLButtonElement | null) {
+		const container = btn?.closest(".dropdown")
+		const menu = container?.querySelector(".dropdown-menu")
+		return { container, menu }
+	}
+
+	copyButton?.addEventListener("click", async () => {
+		const markdownUrl = copyButton.dataset.markdownUrl
+		if (!markdownUrl) return
+
+		let state: "copied" | "error" = "copied"
+		copyButton.disabled = true
+
+		try {
+			const res = await fetch(markdownUrl)
+			const text = await res.text()
+			if (!res.ok) throw new Error("Failed to fetch")
+			await navigator.clipboard.writeText(text)
+		} catch {
+			state = "error"
+		} finally {
+			copyButton.classList.add(state)
+			copyButton.disabled = false
+			setTimeout(() => copyButton.classList.remove(state), FEEDBACK_DURATION)
+		}
+	})
+
+	dropdownToggle?.addEventListener("click", (e) => {
+		e.stopPropagation()
+		const { container, menu } = getDropdownFromToggle(dropdownToggle)
+		menu?.classList.toggle("show")
+		container?.classList.toggle("open")
+	})
+
+	document.addEventListener("click", (e: MouseEvent) => {
+		const target = e.target instanceof Element ? e.target : null
+		if (target?.closest(".dropdown")) return
+		document.querySelectorAll(".dropdown.open").forEach((container) => {
+			container.classList.remove("open")
+			container.querySelector(".dropdown-menu")?.classList.remove("show")
+		})
+	})
+
+	document.addEventListener("click", (e: MouseEvent) => {
+		const target = e.target instanceof Element ? e.target : null
+		const copyLinkBtn = target?.closest(".dropdown-item[data-markdown-url]")
+		if (copyLinkBtn && copyLinkBtn instanceof HTMLButtonElement) {
+			e.preventDefault()
+			const url = copyLinkBtn.dataset.markdownUrl
+			if (url) navigator.clipboard.writeText(url)
+			const container = copyLinkBtn.closest(".dropdown")
+			container?.classList.remove("open")
+			container?.querySelector(".dropdown-menu")?.classList.remove("show")
+		}
+	})
+</script>

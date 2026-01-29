@@ -1,0 +1,12 @@
+---
+import DefaultPageTitle from "@astrojs/starlight/components/PageTitle.astro"
+import LLMActions from "./LLMActions.astro"
+
+const { entry } = Astro.locals.starlightRoute
+const { isInLLMs } = entry.data
+---
+
+<DefaultPageTitle>
+	<slot />
+</DefaultPageTitle>
+{isInLLMs && <LLMActions />}

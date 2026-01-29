@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.2.0
+
+### Minor Changes
+
+- 9f9f821: Add LLM action buttons below page title
+  - Copy markdown content
+  - Copy markdown URL
+  - Open in ChatGPT
+  - Open in Claude
+
+- 5aa97a0: Generate and serve `.md` file for each content page for better access from AI tools
+
 ## 1.1.2
 
 ### Patch Changes
