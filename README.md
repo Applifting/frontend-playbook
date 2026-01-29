@@ -19,6 +19,9 @@ Think of it as a handbook you can refer to whenever you're unsure about how to n
 **Prerequisites:** Node.js (see `.nvmrc`) and pnpm
 
 ```bash
+# Setup environment variables
+cp .env.example .env
+
 # Install dependencies
 pnpm install
 
