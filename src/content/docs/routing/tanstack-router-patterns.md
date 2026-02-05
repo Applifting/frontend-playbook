@@ -10,7 +10,7 @@ It is possible to easily integrate Tanstack Router and Tanstack Query to have ac
 
 - Start fetching data even before a route component begins to render
 - Block rendering of a route till data is fetched (to avoid spinnagedon if the response time is quick)
-- Co-location of data and routes - goes well with our feature-sliced approach
+- Co-location of data and routes - goes well with our feature-based approach
 - Built in suspense and error boundaries - goes well with `useSuspenseQuery`
 
 ## Examples
